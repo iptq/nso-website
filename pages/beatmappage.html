@@ -1,0 +1,130 @@
+<div class="jumbotron">
+	<center>
+		<h3>{{ info.artist }}</h3>
+		<h1 style="margin-top: 10px;">{{ info.title }}</h1>
+		<h4 style="margin-top: 20px;">Mapped by {{ info.creator }}</h4>
+	</center>
+</div>
+
+<ul class="nav nav-tabs" role="tablist">
+	<li role="presentation" ng-repeat="beatmap in info.beatmaps" ng-if="beatmap.game_mode == 0" ng-class="{ active: beatmap.id == current_bid }">
+		<a href="/b/{{ beatmap.id }}" aria-controls="/b/{{ beatmap.id }}" role="tab" data-toggle="tab"><img ng-src="/images/difficulty/{{ beatmap.difficultyrating | difficultyImage }}.png" style="vertical-align: middle;" /> {{ beatmap.version }}</a>
+	</li>
+</ul>
+
+<div class="tab-content">
+	<div role="tabpanel" ng-repeat="beatmap in info.beatmaps" ng-if="beatmap.game_mode == 0" ng-class="{ 'tab-pane': true, active: beatmap.id == current_bid }">
+		<div class="row">
+			<div class="col-sm-3 col-xs-12">
+				<div class="row">
+					<div class="btn-group col-xs-12" role="group">
+						<a ng-href="https://localhost:3000/beatmapsets/{{ info.id }}/download" type="button" class="btn btn-primary col-xs-6">Download</a>
+						<a ng-href="osu://b/{{ beatmap.id }}" type="button" class="btn btn-primary col-xs-6">osu!direct</a>
+					</div>
+				</div>
+				<br />
+				<p>
+					<img ng-src="http://b.ppy.sh/thumb/{{ info.id }}l.jpg" style="width: 100%;" />
+				</p>
+				<div class="panel panel-default">
+					<div class="list-group">
+						<div class="list-group-item"><i class="fa fa-fw fa-star" ng-repeat="_ in ((_ = []) && (_.length=Math.floor(beatmap.difficultyrating)) && _) track by $index"></i> {{ beatmap.difficultyrating | number: 2 }}</div>
+						<div class="list-group-item"><i class="fa fa-fw fa-times-circle"></i> {{ beatmap.max_combo | number: 0 }}</div>
+						<div class="list-group-item"><i class="fa fa-fw fa-clock-o"></i> {{ beatmap.hit_length | timeFormat }}</div>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<table class="table">
+						<tr>
+							<td><i class="fa fa-fw fa-circle-o"></i> CS {{ beatmap.diff_size }}</td>
+							<td><i class="fa fa-fw fa-fast-forward"></i> AR {{ beatmap.diff_approach }}</td>
+						</tr>
+						<tr>
+							<td><i class="fa fa-fw fa-check-square-o"></i> OD {{ beatmap.diff_overall }}</td>
+							<td><i class="fa fa-fw fa-medkit"></i> HP {{ beatmap.diff_drain }}</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="col-sm-9 col-xs-12">
+				<div ng-if="beatmap.scores.length > 0">
+					<center>
+						<div class="panel panel-default" style="width: 60%;">
+							<div class="panel-heading">
+								<h4 class="panel-title"><b><a href="/u/{{ beatmap.scores[0].user.id }}">{{ beatmap.scores[0].user.username }}</a></b> is in the lead!</h4>
+							</div>
+							<table class="table">
+								<tr>
+									<td>Score</td>
+									<td>{{ beatmap.scores[0].score | number: 0 }}</td>
+									<td rowspan="5" style="text-align: center; vertical-align: middle !important;">
+										<img ng-src="/images/ranks/large/{{ beatmap.scores[0].rank }}.png" style="width: 100%; max-width: 100px;" />
+									</td>
+								</tr>
+								<tr>
+									<td>Combo</td>
+									<td>{{ beatmap.scores[0].max_combo | number: 0 }}</td>
+								</tr>
+								<tr>
+									<td>300 / 100 / 50</td>
+									<td>
+										{{ beatmap.scores[0].count_300 | number: 0 }} /
+										{{ beatmap.scores[0].count_100 | number: 0 }} /
+										{{ beatmap.scores[0].count_50 | number: 0 }}
+									</td>
+								</tr>
+								<tr>
+									<td>Misses</td>
+									<td>{{ beatmap.scores[0].miss_count | number: 0 }}</td>
+								</tr>
+								<tr>
+									<td>Mods</td>
+									<td>{{ beatmap.scores[0].mods | mods }}</td>
+								</tr>
+							</table>
+						</div>
+					</center>
+					<div class="panel panel-default">
+						<div style="overflow-x: auto;">
+							<table class="table table-striped table-hover">
+								<thead>
+									<tr>
+										<th>Rank</th>
+										<th></th>
+										<th>Username</th>
+										<th>Performance</th>
+										<th>Score</th>
+										<th>Combo</th>
+										<th>Misses</th>
+										<th>Accuracy</th>
+										<th>Mods</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="score in beatmap.scores | orderBy: '-pp'">
+										<td>{{ $index + 1 }}</td>
+										<td><img ng-src="/images/ranks/small/{{ score.rank }}.png" /></td>
+										<td><a href="/u/{{ score.user.id }}">{{ score.user.username }}</a></td>
+										<td>{{ score.pp | number: 2 }}pp</td>
+										<td>{{ score.score | number: 0 }}</td>
+										<td>{{ score.max_combo | number: 0 }}</td>
+										<td>{{ score.miss_count | number: 0 }}</td>
+										<td>{{ score.accuracy * 100 | number: 2 }}%</td>
+										<td>{{ score.mods | mods }}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div ng-if="beatmap.scores.length == 0">
+					<center>
+						<div class="well">
+							There are no scores for this map!
+						</div>
+					</center>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

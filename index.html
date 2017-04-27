@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html ng-app="nsoweb">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>&iexcl;nso</title>
+	<!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous" /> -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/yeti/bootstrap.min.css" integrity="sha384-HzUaiJdCTIY/RL2vDPRGdEQHHahjzwoJJzGUkYjHVzTwXFQ2QN/nVgX7tzoMW3Ov"
+	 crossorigin="anonymous">
+	<link rel="stylesheet" href="/css/nsoweb.min.css" />
+
+	<script src="https://use.fontawesome.com/92d0b94486.js"></script>
+	<script src="/js/nsoweb.min.js"></script>
+
+	<base href="/">
+</head>
+
+<body>
+	<div class="alert alert-warning" style="margin: 0" ng-if="user.email_verified == false">
+		<div class="container">
+			It looks like your email hasn't been verified yet. <span id="resend_notice" style="color: #060;"><a href="javascript:resend_verification();" style="color: #FFF; text-decoration: underline;">Resend verification email?</a></span>
+		</div>
+	</div>
+	<nav class="navbar navbar-default">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+				<a class="navbar-brand" href="javascript:void(0);" id="main_logo">&iexcl;nso</a>
+			</div>
+			<div id="main-navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="/">Leaderboard</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right" ng-show="user.logged_in == true">
+					<li><a ng-href="/u/{{ user.id }}">{{ user.username }}</a></li>
+					<li><a href="/logout">Logout</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right" ng-show="user.logged_in == false">
+					<li><a href="/register">Register</a></li>
+					<li><a href="/login">Login</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="container">
+		<div ng-view></div>
+	</div>
+</body>
+
+</html>
